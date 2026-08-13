@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
@@ -52,7 +53,7 @@ class MaintenanceRequestController
     {
         $validated = $r->validate([
             'customer_id' => 'required|exists:customers,id',
-            'technician_id' => ['nullable', Rule::exists('users', 'id')->where(fn($q) => $q->where('role', 'technician'))],
+            'technician_id' => ['nullable', Rule::exists('users', 'id')->where('role', 'technician')],
             'title' => 'required|min:5|max:100',
             'description' => 'required|min:10',
             'priority' => 'required|in:low,medium,high',
@@ -93,7 +94,7 @@ class MaintenanceRequestController
             'priority' => 'required|in:low,medium,high',
             'status' => 'required|in:pending,in_progress,completed,cancelled',
             'customer_id' => 'required|exists:customers,id',
-            'technician_id' => ['nullable', Rule::exists('users', 'id')->where(fn($q) => $q->where('role', 'technician'))],
+            'technician_id' => ['nullable', Rule::exists('users', 'id')->where('role', 'technician')],
             'requested_at' => 'required|date'
         ]);
 
@@ -115,8 +116,8 @@ class MaintenanceRequestController
     {
         $user = auth()->user();
 
-        if ($user->role === 'admin') {
-            return;
+if ($user->role === 'admin') {
+                return;
         }
 
         if ($request->technician_id !== $user->id) {
@@ -124,4 +125,3 @@ class MaintenanceRequestController
         }
     }
 }
-
